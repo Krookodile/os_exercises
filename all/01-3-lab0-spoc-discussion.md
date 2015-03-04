@@ -57,12 +57,12 @@
 熟悉基本的git命令行操作命令，从github上的[ucore git repo](http://www.github.com/chyyuu/ucore_lab)下载ucore lab实验
 - [x]  
 
-> 
+> 下载完毕
 
 尝试用qemu+gdb（or ECLIPSE-CDT）调试lab1
 - [x]  
 
-> 
+> 调试完毕
 
 对于如下的代码段，请说明”：“后面的数字是什么含义
 ```
