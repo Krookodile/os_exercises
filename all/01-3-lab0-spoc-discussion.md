@@ -132,7 +132,7 @@ SETGATE(intr, 0,1,2,3);
      list_entry_t* te=node0;
      for（int i=1; i<3; ++i）
      {
-        cout<<list_next(te)<<' '<<elm3;
+        cout<<list_next(te)<<end;
         te=list_next(te);
       }
      return 0;   
