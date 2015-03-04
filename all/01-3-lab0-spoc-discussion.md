@@ -15,7 +15,7 @@
 虽然学过计算机原理和x86汇编（根据THU-CS的课程设置），但对ucore中涉及的哪些硬件设计或功能细节不够了解？
 - [x]  
 
->   
+>  ucore中设计的知识包括文件系统、虚实地址转换、互斥锁、中断、分时、内存管理等。我觉得文件管理系统与内存管理部分我不是    很熟悉，需要花时间好好学习。
 
 
 哪些困难（请分优先级）会阻碍你自主完成lab实验？
@@ -105,12 +105,37 @@ SETGATE(intr, 0,1,2,3);
 请问执行上述指令后， intr的值是多少？
 - [x]  
 
-> 
+> 65538
 
 请分析 [list.h](https://github.com/chyyuu/ucore_lab/blob/master/labcodes/lab2/libs/list.h)内容中大致的含义，并能include这个文件，利用其结构和功能编写一个数据结构链表操作的小C程序
 - [x]  
 
 > [list.h]中实现了一个简单的双端链表结构，支持简单的初始化，删除，插入（作为前后元素），清空以及返回某个元素的前后继的   基本功能。下面是用这个头文件实现的一个简单的数据结构。
+  利用该头文件 简单写了一个小程序：
+  #include<iostream>
+  #include<stdlib>
+  #include "list.h"
+  using namespace std;
+  int main()
+  {
+     //构造节点 
+     list_entry_t* node0=new list_entry_t;
+     list_entry_t* node1=new list_entry_t;
+     list_entry_t* node2=new list_entry_t;
+     //构造链表 分别用了前插后插两种
+     list_init(node1);
+     list_add(node1, node2);
+     list_add_before(node1, node0);
+     //检验结果
+     cout<<node0<<endl;
+     list_entry_t* te=node0;
+     for（int i=1; i<3; ++i）
+     {
+        cout<<list_next(te)<<' '<<elm3;
+        te=list_next(te);
+      }
+     return 0;   
+  }    
 
 ---
 
