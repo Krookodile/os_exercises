@@ -78,7 +78,7 @@
 ## 3.4 linux系统调用分析
  1. 通过分析[lab1_ex0](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab1/lab1-ex0.md)了解Linux应用的系统调用编写和含义。(w2l1)
 
->    objdump是用查看目标文件或者可执行的目标文件的构成的GCC工具，利用这个工具可以轻松的看到目标文件与源代码之间的丝丝      的关系。objdump功能强大，这里的分析分别用了-d （反汇编），-h（段概括）两个模式来观察。
+     objdump是用查看目标文件或者可执行的目标文件的构成的GCC工具，利用这个工具可以轻松的看到目标文件与源代码之间的丝丝      的关系。objdump功能强大，这里的分析分别用了-d （反汇编），-h（段概括）两个模式来观察。
      首先是反汇编模式：
      ```
      lab1-ex0.exe:     file format elf64-x86-64
