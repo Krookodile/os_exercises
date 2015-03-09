@@ -29,6 +29,10 @@
  
  1. 以ucore lab8的answer为例，uCore的系统调用有哪些？大致的功能分类有哪些？(w2l1)
  
+>   在lab8_result/kern/syscall/syscall.c中，我们可以清楚地看到有22条系统调用。这22条命令主要涉及的功能有进程控制（如fo     rk、exit、exec、getpid）、进程间通信(kill)、系统控制（gettime）、文件系统控制（read、write、dup、getdirentry）、内     存管理（fstat、fsync）等方面。
+    基本涵盖了操作系统所必须承载的接口调用，为上层应用调用外部设备资源提供了安全、可靠、高效的系统支持。
+ 
+ 
  ```
   + 采分点：说明了ucore的大致数量（二十几个），说明了ucore系统调用的主要分类（文件操作，进程管理，内存管理等）
   - 答案没有涉及上述两个要点；（0分）
