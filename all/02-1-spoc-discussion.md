@@ -19,7 +19,10 @@
 
 >  Grub的实质是一个mini os，它拥有shell，支持script，支持特定文件系统。grub由stage1，stage1-5，stage2以及/boot/grub目    录下的诸多文件（包括Grub的配置文件与相关文件系统定义文件等）组成，其核心是stage2，主要功能在于完成操作系统的引导工    作。计算机启动时，BIOS加载硬盘主引导扇区总共512字节的二进制代码，执行IPL，IPL就是存储于446个字节的MBR中，是GRUB的第    一个部分（stage1）。stage1的工作是加载stage1_5（ext3文件系统就是e2fs_stage1_5），它位于0面0道第2扇区开始的十几个扇    区内。stage1_5运行后，就可以识别/boot所在分区的文件系统了。当加载并运行了stage2后grub，会根据menulist或用户输入加载    kernel，然后控制权就转到Linux了。
  
- 3. 比较NTLDR和GRUB的功能有差异。
+ 3. 比较NTLDR和GRUB的功能有差异
+
+>   从功能上说，Grub是一个更加强大的引导管理器。ntldr只是为windows NT系统专门配置的引导文件，而Grub是多系统引导管理器，许多多系统以及linux环境都在使用Grub作为引导。
+
  4. 了解u-boot的功能。
 
 ## 3.3 中断、异常和系统调用比较
