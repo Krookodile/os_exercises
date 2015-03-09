@@ -93,6 +93,45 @@
      4003c1:	c3                   	retq   
      ```
      这里就是.init部分的汇编代码。原文全部汇编代码很长，这里摘录一段，这里有一个调用库函数操作。
+     
+      nm命令用来列出目标文件的符号清单：（一部分结果）
+```
+0000000000000002 a AF_INET
+000000000060105c B __bss_start
+000000000060105c b completed.6972
+0000000000601028 D __data_start
+0000000000601028 W data_start
+0000000000400430 t deregister_tm_clones
+00000000004004a0 t __do_global_dtors_aux
+0000000000600e18 t __do_global_dtors_aux_fini_array_entry
+0000000000601030 D __dso_handle
+0000000000600e28 d _DYNAMIC
+000000000060105c D _edata
+0000000000601060 B _end
+0000000000400564 T _fini
+00000000004004c0 t frame_dummy
+0000000000600e10 t __frame_dummy_init_array_entry
+0000000000400670 r __FRAME_END__
+0000000000601000 d _GLOBAL_OFFSET_TABLE_
+                 w __gmon_start__
+0000000000601038 d hello
+00000000004003a8 T _init
+0000000000600e18 t __init_array_end
+0000000000600e10 t __init_array_start
+0000000000400570 R _IO_stdin_used
+0000000000000006 a IPPROTO_TCP
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+0000000000600e20 d __JCR_END__
+……
+```
+ 
+ file命令用于确定文件类型：（一部分输出）
+ ```
+lab1-ex0.exe: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=337b4a665f50f5ae7931487124df3038c7318f17, not stripped
+```
+ 系统调用是应用程序同系统之间的接口，由操作系统提供。
+ 操作系统的主要功能是为管理硬件资源和为应用程序开发人员提供良好的环境来使应用程序具有更好的兼容性，为了达到这个目的，内核提供一系列具备预定功能的多内核函数，通过一组称为系统调用（system call)的接口呈现给用户。 系统调用把应用程序的请求传给内核，调用相应的的内核函数完成所需的处理，将处理结果返回给应用程序。
 
  ```
   + 采分点：说明了objdump，nm，file的大致用途，说明了系统调用的具体含义
@@ -105,7 +144,61 @@
  
  1. 通过调试[lab1_ex1](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab1/lab1-ex1.md)了解Linux应用的系统调用执行过程。(w2l1)
  
-
+>
+     strace常用来跟踪进程执行时的系统调用和所接收的信号。它可以跟踪到一个进程产生的系统调用,包括参数，返回值，执行消耗的时间。（下面是一部分输出结果）
+```
+hello world
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 27.97    0.000087          29         3         3 access
+ 21.22    0.000066          33         2           open
+ 10.61    0.000033          33         1           brk
+ 10.29    0.000032          11         3           fstat
+  9.97    0.000031           4         8           mmap
+  6.11    0.000019           5         4           mprotect
+  5.47    0.000017          17         1           execve
+  3.54    0.000011          11         1           munmap
+  2.89    0.000009           9         1           write
+  0.96    0.000003           3         1           read
+  0.64    0.000002           1         2           close
+  0.32    0.000001           1         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000311                    28         3 total
+```
+   /proc/interrupts是中断报告文件，more命令类似cat，这条命令可以观察其他的中断信息：（一部分输出）
+```
+            CPU0       CPU1       CPU2       CPU3       
+  0:         17          0          0          0   IO-APIC-edge      timer
+  1:        160       1961         91        122   IO-APIC-edge      i8042
+  8:          0          1          0          0   IO-APIC-edge      rtc0
+  9:        441        249         70        135   IO-APIC-fasteoi   acpi
+ 12:        896       9148        754        801   IO-APIC-edge      i8042
+ 16:       4563      50434        514       5416   IO-APIC-fasteoi   ehci_hcd:us
+b1
+ 19:          0          0          0          0   IO-APIC-fasteoi   mmc0, jmb38
+x_ms:slot0
+ 23:          8         66          1          1   IO-APIC-fasteoi   ehci_hcd:us
+b2
+ 41:          0          0          0          0   PCI-MSI-edge      xhci_hcd
+ 42:       6689      29014       1761      10658   PCI-MSI-edge      ahci
+ 43:         13          0          0          0   PCI-MSI-edge      mei_me
+ 44:      65566        360         22         58   PCI-MSI-edge      iwlwifi
+ 45:          5         15          1          1   PCI-MSI-edge      nouveau
+ 46:       8250      76775       9019       9343   PCI-MSI-edge      i915
+ 47:         34        328          4          7   PCI-MSI-edge      snd_hda_int
+el
+ 48:         52        189      73017         37   PCI-MSI-edge      eth0
+NMI:          6          7          9          7   Non-maskable interrupts
+LOC:      96435     105801      86782      75210   Local timer interrupts
+SPU:          0          0          0          0   Spurious interrupts
+PMI:          6          7          9          7   Performance monitoring interr
+upts
+```
+ 
+   执行过程：（中断->系统调用号->系统调用表->函数库->应用程序）
+   我们通过软件中断0x80，系统会跳转到一个预设的内核空间地址，它指向了系统调用处理程序，即在arch/i386/kernel/entry.S文件中使用汇编语言编写的system_call函数。
+   软中断指令int 0x80执行时，系统调用号会被放进eax寄存器，同时，sys_call_table每一项占用4个字节。这样，system_call函数可以读取eax寄存器获得当前系统调用的系统调用号，将其乘以4天生偏移地址，然后以sys_call_table为基址，基址加上偏移地址所指向的内容即是应该执行的系统调用服务例程的地址。
+ 
  ```
   + 采分点：说明了strace的大致用途，说明了系统调用的具体执行过程（包括应用，CPU硬件，操作系统的执行过程）
   - 答案没有涉及上述两个要点；（0分）
