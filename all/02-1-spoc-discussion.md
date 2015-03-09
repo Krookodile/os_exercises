@@ -11,7 +11,7 @@
 
 ## 3.2 系统启动流程
  1. 了解NTLDR的启动流程。
- 
+
 >  NTLDR是NT内核操作系统的启动器，主引导记录在找到NTLDR之后初始化并启动NTLDR，并把系统控制权转移给启动器。之后就开始由    NTLDR组织引导过程。初始引导加载器阶段中，NTLDR将NT系统从计算机的微处理器从实模式转换为32位平面内存模式，再执行适当    的小型文件系统驱动程序识别每一个用NTFS或FAT格式的文件系统分区，在活动分区根目录寻找并加载Boot.ini文件。通过Boot.ini    文件的配置，NTLDR展开之后的启动流程。在处理完boot.ini文件之后，ntldr会启动ntdetect.com程序。在基于X86的系统中，ntde    tect.com会通过调用系统固件程序收集安装的硬件信息，然后由ntdetect.com将收集的计算机硬件信息列表并将列表返回到ntldr。    Ntldr获取从ntdetect.com发来的信息后，将这些信息组织成为内部结构形式，然后由ntldr启动ntoskrnl.exe程序,并将这些信息和    boot.ini文件中的信息，以及注册表中的硬件和软件信息传递给ntoskrnl.exe 程序，即下放给控制权传递给Windows XP内核。
    至此，Ntldr启动任务完成。
 
@@ -52,7 +52,7 @@
   - 答案除了对上述两个要点都进行了正确阐述外，还进行了扩展和更丰富的说明（3分）
  ```
  
- 1. 以ucore lab8的answer为例，uCore的系统调用有哪些？大致的功能分类有哪些？(w2l1)
+ 3. 以ucore lab8的answer为例，uCore的系统调用有哪些？大致的功能分类有哪些？(w2l1)
  
 >   在lab8_result/kern/syscall/syscall.c中，我们可以清楚地看到有22条系统调用。这22条命令主要涉及的功能有进程控制（如fo     rk、exit、exec、getpid）、进程间通信(kill)、系统控制（gettime）、文件系统控制（read、write、dup、getdirentry）、内     存管理（fstat、fsync）等方面。
     基本涵盖了操作系统所必须承载的接口调用，为上层应用调用外部设备资源提供了安全、可靠、高效的系统支持。
