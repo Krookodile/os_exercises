@@ -77,7 +77,22 @@
  
 ## 3.4 linux系统调用分析
  1. 通过分析[lab1_ex0](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab1/lab1-ex0.md)了解Linux应用的系统调用编写和含义。(w2l1)
- 
+
+>    objdump是用查看目标文件或者可执行的目标文件的构成的GCC工具，利用这个工具可以轻松的看到目标文件与源代码之间的丝丝      的关系。objdump功能强大，这里的分析分别用了-d （反汇编），-h（段概括）两个模式来观察。
+     首先是反汇编模式：
+     ’‘’
+     lab1-ex0.exe:     file format elf64-x86-64
+     Disassembly of section .init:
+     00000000004003a8 <_init>:
+     4003a8:	48 83 ec 08          	sub    $0x8,%rsp
+     4003ac:	48 8b 05 45 0c 20 00 	mov    0x200c45(%rip),%rax        # 600ff8 <_DYNAMIC+0x1d0>
+     4003b3:	48 85 c0             	test   %rax,%rax
+     4003b6:	74 05                	je     4003bd <_init+0x15>
+     4003b8:	e8 33 00 00 00       	callq  4003f0 <__gmon_start__@plt>
+     4003bd:	48 83 c4 08          	add    $0x8,%rsp
+     4003c1:	c3                   	retq   
+     ‘’‘
+     这里就是.init部分的汇编代码。原文全部汇编代码很长，这里摘录一段，这里有一个调用库函数操作。
 
  ```
   + 采分点：说明了objdump，nm，file的大致用途，说明了系统调用的具体含义
