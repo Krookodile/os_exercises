@@ -21,6 +21,7 @@ NOTICE
 - [x]  
 
 >  
+    ucore OS配置和驱动外设时钟的准备工作包括IDT的初始换，包含了时钟中断描述符的设置。其次，8259中断控制器也进入           中断控制器的初始化过程。最后是8253对始终外设的初始化。 
 
 lab1中完成了对哪些外设的访问？ (w2l2)
  ```
@@ -33,6 +34,7 @@ lab1中完成了对哪些外设的访问？ (w2l2)
 - [x]  
 
 >  
+    ucore OS访问的外设包括时钟、串口、并口、CGA与键盘。
 
 lab1中的cprintf函数最终通过哪些外设完成了对字符串的输出？ (w2l2)
  ```
@@ -45,6 +47,7 @@ lab1中的cprintf函数最终通过哪些外设完成了对字符串的输出？
 - [x]  
 
 >  
+    cprintf函数最终通过串口、并口、CGA三个外设完成了对字符串的输出。
 
 ---
 
@@ -55,6 +58,31 @@ lab1中的cprintf函数最终通过哪些外设完成了对字符串的输出？
 lab1中printfmt函数用到了可变参，请参考写一个小的linux应用程序，完成实现定义和调用一个可变参数的函数。(spoc)
 - [x]  
 
+> 
+    这里就是一小段利用库资源 va_arg 完成的对可变参的Linux代码：
+    ···
+    #include <stdlib.h>
+    #include <stdio.h>
+    #include <stdarg.h>
+    void foo(int i,...)
+    {
+	    va_list get;
+	    int temp;
+	    temp = i;
+	    va_start(get,i);
+	    while(i > 0)
+	    {
+		    temp = va_arg(get,int);
+		    printf("%d ",temp);
+		    i--;
+	    }
+    }
+    int main()
+    {
+	    foo(2,4,0);
+	    return 0;
+    }
+    ···
 
 
 如果让你来一个阶段一个阶段地从零开始完整实现lab1（不是现在的填空考方式），你的实现步骤是什么？（比如先实现一个可显示字符串的bootloader（描述一下要实现的关键步骤和需要注意的事项），再实现一个可加载ELF格式文件的bootloader（再描述一下进一步要实现的关键步骤和需要注意的事项）...） (spoc)
