@@ -60,7 +60,7 @@ lab1中printfmt函数用到了可变参，请参考写一个小的linux应用程
 
 > 
     这里就是一小段利用库资源 va_arg 完成的对可变参的Linux代码：
-    ···
+    ```
     #include <stdlib.h>
     #include <stdio.h>
     #include <stdarg.h>
@@ -82,7 +82,7 @@ lab1中printfmt函数用到了可变参，请参考写一个小的linux应用程
 	    foo(2,4,0);
 	    return 0;
     }
-    ···
+    ```
 
 
 如果让你来一个阶段一个阶段地从零开始完整实现lab1（不是现在的填空考方式），你的实现步骤是什么？（比如先实现一个可显示字符串的bootloader（描述一下要实现的关键步骤和需要注意的事项），再实现一个可加载ELF格式文件的bootloader（再描述一下进一步要实现的关键步骤和需要注意的事项）...） (spoc)
