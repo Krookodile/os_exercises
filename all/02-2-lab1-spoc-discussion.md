@@ -60,6 +60,7 @@ lab1中printfmt函数用到了可变参，请参考写一个小的linux应用程
 
 > 
     这里就是一小段利用库资源 va_arg 完成的对可变参的Linux代码：
+    
     ```
     #include <stdlib.h>
     #include <stdio.h>
