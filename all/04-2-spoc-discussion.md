@@ -67,6 +67,137 @@
 ```
 
 (2)（spoc）根据你的`学号 mod 4`的结果值，确定选择四种替换算法（0：LRU置换算法，1:改进的clock 页置换算法，2：工作集页置换算法，3：缺页率置换算法）中的一种来设计一个应用程序（可基于python, ruby, C, C++，LISP等）模拟实现，并给出测试。请参考如python代码或独自实现。
+```
+#include<iostream>
+#include<stdlib.h>
+
+using namespace std;
+#define M 2
+int const A = 4;//Pages
+int count = 0;
+int Inside[A];
+int const PageCount   =10;//Total page
+int Page[PageCount];
+int state[A];//clock state
+int state2[A][M];// A:pos M:revise
+double lost = 0.0;
+
+bool isInside(int num){
+	for(int i = 0; i < A; i++){
+		if(Inside[i] == Page[num]){
+			state[i] = 1;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool change(){
+	if((rand()%2+1) == 1 ){
+		cout<<"Changed"<<endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool isInside2(int num){
+	for(int i = 0; i < A; i++){
+		if(Inside[i] == Page[num]){
+			if(change()){
+				state2[i][0] = 1;
+				state2[i][1] = 1;
+			}
+			else{
+				state2[i][0] = 1;
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+int whichpage(){
+	int j;
+
+	for(j=0; j < A;j++){
+        if(state2[j][0] == 0&&state2[j][1] == 0){
+			return j;
+		}
+	}
+	for(j=0; j < A;j++ ){
+        if(state2[j][0] == 0&&state2[j][1] == 1){
+			return j;
+		}
+		state2[j][0] = 0 ;
+	}
+	for(j=0; j < A;j++ ){
+		state2[j][0] = 0 ;
+	}
+	return whichpage();
+}
+
+void LCLOCK(int num){
+	int j;
+
+	if(isInside2(num)){
+		cout<<"Hit"<<endl;
+		for(int i=0 ; i <A; i++)
+			
+        cout<<"Block"<<i<<"#content:"<<Inside [i]<<endl;
+	}
+	else
+		if(count == A){
+			lost++;
+			j =whichpage();
+			Inside[j] = Page[num];
+			state2[j][0] = 1;
+			for(int i=0 ; i <A; i++)
+			
+           cout<<"Block"<<i<<"#content:"<<Inside [i]<<endl;
+			
+		}
+
+		else{
+			Inside[count] = Page[num];
+			count++;
+			for(int i=0 ; i <A; i++)
+			cout<<"Block"<<i<<"#content:"<<Inside [i]<<endl;
+		}
+}
+
+int main()
+{
+  char ch ;
+  for(int i = 0; i < PageCount; i++){
+	    Page[i] =rand()%9 + 1;
+		cout<<Page[i]<<" ";
+	}
+  cout<<endl;
+
+  lost = 0;
+  count = 0;
+  for(int m = 0; m < A; m++)
+  {
+  	for(int n = 0; n < 2;n++)
+	state2[m][n] = 0;
+  }
+  for(int j = 0; j < A; j++)
+  	Inside[j] = 0;
+	
+  for(int i = 0; i < PageCount; i++)
+  {
+    cout<<"read Page["<<i<<"]="<<Page[i]<<endl;
+    LCLOCK(i);
+  }
+  cout<<"\nTimes"<<PageCount<<"\nBreak times"<<lost<<"\nPercentage"<<lost/(PageCount)<<"\n"<<endl;
+  
+  return 0;
+}
+```
+
+
+
  - [页置换算法实现的参考实例](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab3/page-replacement-policy.py)
  
 ## 扩展思考题
